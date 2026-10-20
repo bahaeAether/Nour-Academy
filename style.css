@@ -101,7 +101,7 @@ button:focus-visible {
   min-height: 420px;
   padding: 64px 6%;
   overflow: hidden;
-  background: #edf3e9;
+  background: #e2f5d3;
 }
 
 .hero-content {
@@ -177,10 +177,6 @@ h1 {
 .hero-note span {
   color: var(--color-primary);
   font-weight: 800;
-}
-
-.hero-decoration {
-  display: none;
 }
 
 .section-container {

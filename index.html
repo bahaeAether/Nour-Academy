@@ -59,8 +59,30 @@
           <span class="catalog-label">Primaire · Collège · Lycée</span>
         </div>
 
-        <div class="catalog-toolbar">
-          <p id="results-count" aria-live="polite">Chargement en cours…</p>
+        <div class="catalog-toolbar" id="dropdown">
+          <div class="select-wrapper">
+            <label for="niveau" class="select-label">Niveau:</label>
+            <select id="niveau" class="niveau-select">
+              <option value="" disabled selected hidden>Niveau</option>
+              <option value="">-</option>
+              <option value="Primaire">Primaire</option>
+              <option value="Collège">Collège</option>
+              <option value="Lycée">Lycée</option>
+            </select>
+          </div>
+
+          <div class="select-wrapper">
+            <label for="matiere" class="select-label">Matière:</label>
+            <select id="matiere" class="matiere-select">
+              <option value="" disabled selected hidden>Matière</option>
+              <option value="">-</option>
+              <option value="Mathématiques">Mathématiques</option>
+              <option value="Physique">Physique et Chimie</option>
+              <option value="SVT">Sciences de la Vie et de la Terre</option>
+              <option value="Français">Français</option>
+              <option value="Anglais">Anglais</option>
+            </select>
+          </div>
         </div>
 
         <div class="course-grid" id="course-list">

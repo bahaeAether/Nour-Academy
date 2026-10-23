@@ -160,11 +160,11 @@ const courses = [
     creneau: "Mar. et jeu. · 18h–20h",
     prix: 400,
     places: 20,
-  }
+  },
 ];
 
 const courseList = document.querySelector("#course-list");
-const resultsCount = document.querySelector("#results-count");
+const dropdown = document.querySelector("#dropdown");
 
 function createCourse(course) {
   let isFull = course.places === 0;
@@ -211,8 +211,7 @@ function createCourse(course) {
   if (isFull) {
     status.textContent = "Complet";
     status.classList.add("full");
-  }
-  else {
+  } else {
     status.textContent = "Places disponibles";
   }
 
@@ -236,7 +235,7 @@ function selectCourse(courseId) {
   console.log(`Course selected: ${courseId}`);
   const courseElement = document.getElementById(courseId);
 
-  let selected = courseElement.classList.contains("selected")
+  let selected = courseElement.classList.contains("selected");
 
   if (!selected) {
     courseElement.childNodes.forEach((child) => {
@@ -261,15 +260,19 @@ function selectCourse(courseId) {
             placesNumber -= 1;
             placesLi.textContent = `Places disponibles : ${placesNumber}`;
           }
+
+          if (placesNumber === 0) {
+            const status = courseElement.querySelector(".course-status");
+            status.textContent = "Complet";
+            status.classList.add("full");
+          }
         }
       }
     });
 
     courseElement.classList.add("selected");
     selectedCourses.push(courseId);
-  }
-
-  else {
+  } else {
     courseElement.childNodes.forEach((child) => {
       if (child.tagName === "BUTTON") {
         child.textContent = "Choisir ce cours";
@@ -286,6 +289,12 @@ function selectCourse(courseId) {
           let placesNumber = parseInt(placesMatch[1], 10);
           placesNumber++;
           placesLi.textContent = `Places disponibles : ${placesNumber}`;
+
+          if (placesNumber === 1) {
+            const status = courseElement.querySelector(".course-status");
+            status.textContent = "Places disponibles";
+            status.classList.remove("full");
+          }
         }
       }
     });
@@ -300,4 +309,34 @@ function selectCourse(courseId) {
 courseList.innerHTML = "";
 courses.forEach((course) => {
   courseList.appendChild(createCourse(course));
+});
+
+dropdown.addEventListener("change", () => {
+  courseList.innerHTML = "";
+
+  courses.forEach((course) => {
+    if (
+      dropdown.querySelector("#niveau").value !== "" &&
+      course.niveau !== dropdown.querySelector("#niveau").value
+    ) {
+      return;
+    }
+
+    if (
+      dropdown.querySelector("#matiere").value !== "" &&
+      course.matiere !== dropdown.querySelector("#matiere").value
+    ) {
+      return;
+    }
+
+    courseList.appendChild(createCourse(course));
+  });
+
+  if (courseList.childNodes.length === 0) {
+    const noCoursesMessage = document.createElement("p");
+    noCoursesMessage.textContent =
+      "Aucun cours disponible pour les critères sélectionnés.";
+    courseList.appendChild(noCoursesMessage);
+    console.log(courseList);
+  }
 });

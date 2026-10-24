@@ -332,6 +332,7 @@ courses.forEach((course) => {
 });
 
 dropdown.addEventListener("change", () => {
+  let count = 0;
   courseList.innerHTML = "";
 
   courses.forEach((course) => {
@@ -350,7 +351,10 @@ dropdown.addEventListener("change", () => {
     }
 
     courseList.appendChild(createCourse(course));
+    count++;
   });
+
+  document.querySelector("#course-count").textContent = `Cours trouvés: ${count}`;
 
   if (courseList.childNodes.length === 0) {
     const noCoursesMessage = document.createElement("p");

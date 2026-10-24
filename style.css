@@ -111,14 +111,6 @@ button:focus-visible {
   max-width: 650px;
 }
 
-.eyebrow {
-  margin: 0 0 12px;
-  color: var(--color-primary);
-  font-size: 0.78rem;
-  font-weight: 800;
-  letter-spacing: 0.12em;
-}
-
 h1,
 h2,
 p {
@@ -378,15 +370,6 @@ select:hover {
   flex-direction: column;
   align-items: flex-start;
   gap: 24px;
-}
-
-.help-content .eyebrow {
-  color: #f5d18d;
-}
-
-.help-content p:not(.eyebrow) {
-  max-width: 580px;
-  color: #e1eee8;
 }
 
 .button-light {

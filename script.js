@@ -145,7 +145,7 @@ const courses = [
   },
   {
     id: 17,
-    titre: "Physique-Chimie — 2e Bac",
+    titre: "Physique-Chimie — 2eme Bac",
     matiere: "Physique-Chimie",
     niveau: "Lycée",
     creneau: "Mar. et jeu. · 18h–20h",
@@ -154,7 +154,7 @@ const courses = [
   },
   {
     id: 18,
-    titre: "SVT — 2e Bac",
+    titre: "SVT — 2eme Bac",
     matiere: "SVT",
     niveau: "Lycée",
     creneau: "Mar. et jeu. · 18h–20h",

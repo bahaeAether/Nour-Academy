@@ -90,6 +90,136 @@
         </div>
       </section>
 
+      <section class="registration-section section-container" id="inscription">
+        <div class="registration-heading">
+          <p class="eyebrow">INSCRIPTION</p>
+          <h2>Inscrivez votre enfant</h2>
+          <p class="section-description">
+            Remplissez les informations ci-dessous pour préparer votre dossier.
+          </p>
+        </div>
+
+        <form id="registration-form" novalidate>
+          <fieldset class="form-group">
+            <legend>Informations du parent</legend>
+
+            <div class="form-field">
+              <label for="parent-name">Nom complet</label>
+              <input
+                type="text"
+                id="parent-name"
+                name="parentName"
+                autocomplete="name"
+                placeholder="Ex. : Fatima El Amrani"
+                required
+              />
+              <small class="field-message" id="parent-name-error"></small>
+            </div>
+
+            <div class="form-field">
+              <label for="parent-email">Adresse e-mail</label>
+              <input
+                type="email"
+                id="parent-email"
+                name="parentEmail"
+                autocomplete="email"
+                placeholder="exemple@email.com"
+                required
+              />
+              <small class="field-message" id="parent-email-error"></small>
+            </div>
+
+            <div class="form-field">
+              <label for="parent-phone">Téléphone</label>
+              <input
+                type="tel"
+                id="parent-phone"
+                name="parentPhone"
+                autocomplete="tel"
+                placeholder="06XXXXXXXX ou +2126XXXXXXXX"
+                required
+              />
+              <small class="field-message" id="parent-phone-error"></small>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-group">
+            <legend>Informations de l'élève</legend>
+
+            <div class="form-field">
+              <label for="student-name">Prénom de l'élève</label>
+              <input
+                type="text"
+                id="student-name"
+                name="studentName"
+                autocomplete="given-name"
+                placeholder="Ex. : Yasmine"
+                required
+              />
+              <small class="field-message" id="student-name-error"></small>
+            </div>
+
+            <div class="form-field">
+              <label for="student-level">Niveau scolaire</label>
+              <select id="student-level" name="studentLevel" required>
+                <option value="" selected disabled>Choisir un niveau</option>
+                <option value="Primaire">Primaire</option>
+                <option value="Collège">Collège</option>
+                <option value="Lycée">Lycée</option>
+              </select>
+              <small class="field-message" id="student-level-error"></small>
+            </div>
+          </fieldset>
+
+          <fieldset class="form-group">
+            <legend>Sécurité du compte</legend>
+
+            <div class="form-field">
+              <label for="password">Mot de passe</label>
+              <input
+                type="password"
+                id="password"
+                name="password"
+                autocomplete="new-password"
+                placeholder="8 caractères minimum"
+                required
+              />
+              <small class="field-message" id="password-error"></small>
+            </div>
+
+            <div class="form-field">
+              <label for="confirm-password">Confirmer le mot de passe</label>
+              <input
+                type="password"
+                id="confirm-password"
+                name="confirmPassword"
+                autocomplete="new-password"
+                placeholder="Saisissez à nouveau le mot de passe"
+                required
+              />
+              <small class="field-message" id="confirm-password-error"></small>
+            </div>
+          </fieldset>
+
+          <div class="consent-field">
+            <input type="checkbox" id="consent" name="consent" required />
+            <label for="consent">
+              J'accepte que mes informations soient utilisées pour traiter le
+              dossier d'inscription de mon enfant.
+            </label>
+          </div>
+          <small class="field-message" id="consent-error"></small>
+
+          <button class="button button-primary submit-button" type="submit">
+            Préparer mon dossier
+          </button>
+
+          <p class="form-notice">
+            Les champs obligatoires doivent être correctement remplis.
+          </p>
+        </form>
+      </section>
+
       <section class="help-section">
         <div class="section-container help-content">
           <div>

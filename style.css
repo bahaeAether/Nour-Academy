@@ -1,4 +1,3 @@
-
 :root {
   --color-primary: #176b52;
   --color-primary-dark: #104c3c;
@@ -145,7 +144,9 @@ h1 {
   font-weight: 700;
   text-align: center;
   cursor: pointer;
-  transition: background-color 150ms ease, color 150ms ease;
+  transition:
+    background-color 150ms ease,
+    color 150ms ease;
 }
 
 .button-primary {
@@ -254,7 +255,9 @@ select {
   font: inherit;
   font-size: 0.9rem;
   cursor: pointer;
-  transition: box-shadow 150ms ease, border-color 150ms ease;
+  transition:
+    box-shadow 150ms ease,
+    border-color 150ms ease;
 }
 
 .select-label {
@@ -376,6 +379,120 @@ select:hover {
   cursor: not-allowed;
 }
 
+/* Registration form */
+.registration-section {
+  padding-top: 64px;
+  padding-bottom: 72px;
+}
+
+.registration-heading {
+  max-width: 650px;
+  margin-bottom: 28px;
+}
+
+.registration-heading h2 {
+  margin: 0;
+  font-size: clamp(1.8rem, 4vw, 2.5rem);
+  line-height: 1.2;
+}
+
+#registration-form {
+  display: grid;
+  gap: 24px;
+  max-width: 760px;
+  padding: 24px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-medium);
+  background: var(--color-surface);
+  box-shadow: var(--shadow-card);
+}
+
+.form-group {
+  display: grid;
+  gap: 18px;
+  min-width: 0;
+  margin: 0;
+  padding: 20px 0 0;
+  border: 0;
+  border-top: 1px solid var(--color-border);
+}
+
+.form-group legend {
+  padding: 0 10px 0 0;
+  color: var(--color-primary-dark);
+  font-size: 1.05rem;
+  font-weight: 700;
+}
+
+.form-field {
+  display: grid;
+  gap: 7px;
+  min-width: 0;
+}
+
+.form-field label,
+.consent-field label {
+  font-size: 0.92rem;
+  font-weight: 600;
+}
+
+.form-field input,
+.form-field select {
+  width: 100%;
+  min-height: 46px;
+  padding: 10px 12px;
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-small);
+  background: white;
+  color: var(--color-text);
+  font: inherit;
+}
+
+.form-field input:focus-visible,
+.form-field select:focus-visible {
+  outline: 3px solid var(--color-accent);
+  outline-offset: 2px;
+  border-color: var(--color-primary);
+}
+
+.field-message {
+  min-height: 0;
+  color: var(--color-error);
+  font-size: 0.82rem;
+}
+
+.field-message:empty {
+  display: none;
+}
+
+.consent-field {
+  display: grid;
+  grid-template-columns: 20px minmax(0, 1fr);
+  align-items: start;
+  gap: 10px;
+}
+
+.consent-field input {
+  width: 18px;
+  height: 18px;
+  margin-top: 3px;
+  accent-color: var(--color-primary);
+}
+
+.consent-field label {
+  font-weight: 400;
+}
+
+.submit-button {
+  width: 100%;
+}
+
+.form-notice {
+  margin: -12px 0 0;
+  color: var(--color-muted);
+  font-size: 0.85rem;
+}
+
 .help-section {
   padding: 48px 0;
   background: var(--color-primary);
@@ -421,7 +538,6 @@ select:hover {
   margin-top: 12px !important;
 }
 
-
 /* Floating panier button */
 .cart-toggle {
   position: fixed;
@@ -440,7 +556,9 @@ select:hover {
   color: white;
   box-shadow: 0 6px 22px rgb(0 0 0 / 20%);
   cursor: pointer;
-  transition: background-color 150ms ease, transform 150ms ease;
+  transition:
+    background-color 150ms ease,
+    transform 150ms ease;
 }
 
 .cart-toggle:hover {
@@ -508,7 +626,9 @@ select:hover {
 
   transform: translateX(100%);
   visibility: hidden;
-  transition: transform 250ms ease, visibility 250ms ease;
+  transition:
+    transform 250ms ease,
+    visibility 250ms ease;
 }
 
 .cart-panel.is-open {
@@ -592,6 +712,10 @@ body.cart-open {
     flex-direction: row;
     align-items: flex-end;
     justify-content: space-between;
+  }
+
+  #registration-form {
+    padding: 32px;
   }
 
   .help-content {

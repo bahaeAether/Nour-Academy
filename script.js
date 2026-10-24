@@ -163,11 +163,26 @@ const courses = [
   },
 ];
 
+const selectedCourses = [];
+
+const savedSelectedCourses = localStorage.getItem("selectedCourses");
+if (savedSelectedCourses) {
+  selectedCourses.push(...JSON.parse(savedSelectedCourses));
+}
+
+updateCart();
+
 const courseList = document.querySelector("#course-list");
 const dropdown = document.querySelector("#dropdown");
 
 function createCourse(course) {
-  let isFull = course.places === 0;
+  let isSelected = selectedCourses.includes(`course-${course.id}`);
+  let placesLeft = course.places;
+  if (isSelected) {
+    placesLeft -= 1;
+  }
+
+  let isFull = placesLeft === 0;
 
   const article = document.createElement("article");
   article.classList.add("course-card");
@@ -192,9 +207,7 @@ function createCourse(course) {
   schedule.textContent = `Horaires : ${course.creneau}`;
 
   const places = document.createElement("li");
-  places.textContent = isFull
-    ? "Complet"
-    : `Places disponibles : ${course.places}`;
+  places.textContent = `Places disponibles : ${placesLeft}`;
 
   details.append(schedule, places);
 
@@ -221,15 +234,20 @@ function createCourse(course) {
   button.classList.add("button", "button-primary", "course-button");
   button.type = "button";
   button.textContent = isFull ? "Cours complet" : "Choisir ce cours";
-  button.disabled = isFull;
+
+  button.disabled = (isFull && !isSelected);
   button.addEventListener("click", () => selectCourse(article.id));
 
   article.append(title, subject, level, details, bottom, button);
 
+  if (isSelected) {
+    article.classList.add("selected");
+    button.textContent = "Cours sélectionné";
+    button.classList.add("is-selected");
+  }
+
   return article;
 }
-
-const selectedCourses = [];
 
 function selectCourse(courseId) {
   console.log(`Course selected: ${courseId}`);
@@ -304,6 +322,8 @@ function selectCourse(courseId) {
     const index = selectedCourses.indexOf(courseId);
     if (index > -1) selectedCourses.splice(index, 1);
   }
+
+  updateCart();
 }
 
 courseList.innerHTML = "";
@@ -339,4 +359,90 @@ dropdown.addEventListener("change", () => {
     courseList.appendChild(noCoursesMessage);
     console.log(courseList);
   }
+});
+
+
+const cartToggle = document.querySelector("#cart-toggle");
+const cartPanel = document.querySelector("#cart-panel");
+const cartOverlay = document.querySelector("#cart-overlay");
+const cartClose = document.querySelector("#cart-close");
+const cartBadge = document.querySelector("#cart-badge");
+
+function openCart() {
+  cartPanel.classList.add("is-open");
+  cartOverlay.hidden = false;
+  cartPanel.setAttribute("aria-hidden", "false");
+  cartPanel.inert = false;
+  cartToggle.setAttribute("aria-expanded", "true");
+  cartToggle.setAttribute("aria-label", "Fermer le panier");
+  document.body.classList.add("cart-open");
+  cartClose.focus();
+}
+
+function closeCart() {
+  cartPanel.classList.remove("is-open");
+  cartOverlay.hidden = true;
+  cartPanel.setAttribute("aria-hidden", "true");
+  cartPanel.inert = true;
+  cartToggle.setAttribute("aria-expanded", "false");
+  cartToggle.setAttribute("aria-label", "Ouvrir le panier");
+  document.body.classList.remove("cart-open");
+  cartToggle.focus();
+}
+
+cartToggle.addEventListener("click", () => {
+  if (cartPanel.classList.contains("is-open")) {
+    closeCart();
+  } else {
+    openCart();
+  }
+});
+
+cartClose.addEventListener("click", closeCart);
+cartOverlay.addEventListener("click", closeCart);
+
+document.addEventListener("keydown", (event) => {
+  if (
+    event.key === "Escape" &&
+    cartPanel.classList.contains("is-open")
+  ) {
+    closeCart();
+  }
+});
+
+function updateCart() {
+  const cartItemsContainer = document.querySelector("#cart-items");
+  const cartTotal = document.querySelector("#cart-total");
+  const cartBadge = document.querySelector("#cart-badge");
+
+  let amount = 0;
+
+  cartItemsContainer.innerHTML = "";
+
+  if (selectedCourses.length === 0) {
+    const emptyMessage = document.createElement("p");
+    emptyMessage.textContent = "votre panier est vide.";
+    emptyMessage.classList.add("cart-empty");
+    cartItemsContainer.appendChild(emptyMessage);
+  }
+
+  for (const courseId of selectedCourses) {
+    const course = courses.find((c) => c.id === parseInt(courseId.split("-")[1]));
+    if (course) {
+      amount += course.prix;
+    }
+
+    const cartItem = document.createElement("p");
+    cartItem.classList.add("cart-item");
+    cartItem.innerHTML = `${course.titre} <br/> ${course.prix} MAD / mois`;
+    cartItemsContainer.appendChild(cartItem);
+  }
+  cartTotal.textContent = `${amount} MAD / mois`;
+  cartBadge.textContent = selectedCourses.length;
+}
+
+const saveButton = document.querySelector(".cart-continue");
+
+saveButton.addEventListener("click", () => {
+  localStorage.setItem("selectedCourses", JSON.stringify(selectedCourses));
 });

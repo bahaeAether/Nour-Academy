@@ -493,6 +493,32 @@ select:hover {
   font-size: 0.85rem;
 }
 
+.form-field input.is-invalid,
+.form-field select.is-invalid {
+  border-color: var(--color-error);
+  box-shadow: 0 0 0 2px rgb(189 55 55 / 10%);
+}
+
+.form-field input.is-valid,
+.form-field select.is-valid {
+  border-color: var(--color-success);
+}
+
+.form-field input.is-invalid:focus-visible,
+.form-field select.is-invalid:focus-visible {
+  outline-color: var(--color-error);
+}
+
+.form-field input.is-valid:focus-visible,
+.form-field select.is-valid:focus-visible {
+  outline-color: var(--color-success);
+}
+
+.consent-field input.is-invalid {
+  outline: 2px solid var(--color-error);
+  outline-offset: 2px;
+}
+
 .help-section {
   padding: 48px 0;
   background: var(--color-primary);

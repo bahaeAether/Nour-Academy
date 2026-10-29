@@ -235,7 +235,7 @@ function createCourse(course) {
   button.type = "button";
   button.textContent = isFull ? "Cours complet" : "Choisir ce cours";
 
-  button.disabled = (isFull && !isSelected);
+  button.disabled = isFull && !isSelected;
   button.addEventListener("click", () => selectCourse(article.id));
 
   article.append(title, subject, level, details, bottom, button);
@@ -354,7 +354,8 @@ dropdown.addEventListener("change", () => {
     count++;
   });
 
-  document.querySelector("#course-count").textContent = `Cours trouvés: ${count}`;
+  document.querySelector("#course-count").textContent =
+    `Cours trouvés: ${count}`;
 
   if (courseList.childNodes.length === 0) {
     const noCoursesMessage = document.createElement("p");
@@ -364,7 +365,6 @@ dropdown.addEventListener("change", () => {
     console.log(courseList);
   }
 });
-
 
 const cartToggle = document.querySelector("#cart-toggle");
 const cartPanel = document.querySelector("#cart-panel");
@@ -406,10 +406,7 @@ cartClose.addEventListener("click", closeCart);
 cartOverlay.addEventListener("click", closeCart);
 
 document.addEventListener("keydown", (event) => {
-  if (
-    event.key === "Escape" &&
-    cartPanel.classList.contains("is-open")
-  ) {
+  if (event.key === "Escape" && cartPanel.classList.contains("is-open")) {
     closeCart();
   }
 });
@@ -431,7 +428,9 @@ function updateCart() {
   }
 
   for (const courseId of selectedCourses) {
-    const course = courses.find((c) => c.id === parseInt(courseId.split("-")[1]));
+    const course = courses.find(
+      (c) => c.id === parseInt(courseId.split("-")[1]),
+    );
     if (course) {
       amount += course.prix;
     }
@@ -449,4 +448,256 @@ const saveButton = document.querySelector(".cart-continue");
 
 saveButton.addEventListener("click", () => {
   localStorage.setItem("selectedCourses", JSON.stringify(selectedCourses));
+});
+
+const registrationForm = document.querySelector("#registration-form");
+
+const fields = {
+  parentName: document.querySelector("#parent-name"),
+  parentEmail: document.querySelector("#parent-email"),
+  parentPhone: document.querySelector("#parent-phone"),
+  studentName: document.querySelector("#student-name"),
+  studentLevel: document.querySelector("#student-level"),
+  password: document.querySelector("#password"),
+  confirmPassword: document.querySelector("#confirm-password"),
+  consent: document.querySelector("#consent"),
+};
+
+const errorMessages = {
+  parentName: document.querySelector("#parent-name-error"),
+  parentEmail: document.querySelector("#parent-email-error"),
+  parentPhone: document.querySelector("#parent-phone-error"),
+  studentName: document.querySelector("#student-name-error"),
+  studentLevel: document.querySelector("#student-level-error"),
+  password: document.querySelector("#password-error"),
+  confirmPassword: document.querySelector("#confirm-password-error"),
+  consent: document.querySelector("#consent-error"),
+};
+
+function validateField(fieldName) {
+  const field = fields[fieldName];
+  const error = errorMessages[fieldName];
+  const value = field.type === "checkbox" ? field.checked : field.value.trim();
+
+  let message = "";
+
+  switch (fieldName) {
+    case "parentName":
+      if (!value) {
+        message = "Veuillez saisir le nom complet du parent.";
+      }
+      break;
+
+    case "parentEmail":
+      if (!value) {
+        message = "Veuillez saisir votre adresse e-mail.";
+      } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(value)) {
+        message = "Veuillez saisir une adresse e-mail valide.";
+      }
+      break;
+
+    case "parentPhone":
+      if (!value) {
+        message = "Veuillez saisir votre numéro de téléphone.";
+      } else if (!/^(?:(?:06|07)\d{8}|\+212[67]\d{8})$/.test(value)) {
+        message = "Format invalide. Exemple : 0612345678 ou +212612345678.";
+      }
+      break;
+
+    case "studentName":
+      if (!value) {
+        message = "Veuillez saisir le prénom de l'élève.";
+      }
+      break;
+
+    case "studentLevel":
+      if (!value) {
+        message = "Veuillez choisir le niveau scolaire.";
+      }
+      break;
+
+    case "password":
+      if (!value) {
+        message = "Veuillez saisir un mot de passe.";
+      } else if (value.length < 8) {
+        message = "Le mot de passe doit contenir au moins 8 caractères.";
+      } else if (!/[A-Z]/.test(value)) {
+        message = "Ajoutez au moins une lettre majuscule.";
+      } else if (!/\d/.test(value)) {
+        message = "Ajoutez au moins un chiffre.";
+      } else if (!/[^A-Za-z0-9]/.test(value)) {
+        message = "Ajoutez au moins un caractère spécial.";
+      }
+      break;
+
+    case "confirmPassword":
+      if (!value) {
+        message = "Veuillez confirmer votre mot de passe.";
+      } else if (field.value !== fields.password.value) {
+        message = "Les mots de passe ne correspondent pas.";
+      }
+      break;
+
+    case "consent":
+      if (!value) {
+        message = "Vous devez accepter le traitement des informations.";
+      }
+      break;
+  }
+
+  error.textContent = message;
+
+  field.classList.toggle("is-invalid", Boolean(message));
+  field.classList.toggle("is-valid", !message && Boolean(value));
+
+  field.setAttribute("aria-invalid", String(Boolean(message)));
+
+  return message === "";
+}
+
+Object.keys(fields).forEach((fieldName) => {
+  const field = fields[fieldName];
+
+  const eventName =
+    field.type === "checkbox" || field.tagName === "SELECT"
+      ? "change"
+      : "input";
+
+  field.addEventListener(eventName, () => {
+    validateField(fieldName);
+
+    if (fieldName === "password" && fields.confirmPassword.value) {
+      validateField("confirmPassword");
+    }
+  });
+
+  if (fieldName === "confirmPassword") {
+    field.addEventListener("change", () => {
+      validateField("confirmPassword");
+    });
+  }
+});
+
+const result = document.createElement("section");
+result.id = "registration-result";
+result.setAttribute("aria-live", "polite");
+result.hidden = true;
+
+registrationForm.insertAdjacentElement("afterend", result);
+
+prepareButton.addEventListener("click", function () {
+  let valid = true;
+  let firstInvalidField = null;
+
+  for (const name in fields) {
+    if (!validateField(name)) {
+      valid = false;
+
+      if (firstInvalidField === null) {
+        firstInvalidField = fields[name];
+      }
+    }
+  }
+
+  if (!valid) {
+    firstInvalidField.focus();
+    return;
+  }
+
+  if (selectedCourses.length === 0) {
+    result.hidden = false;
+    result.textContent =
+      "Veuillez choisir au moins un cours dans votre panier.";
+    result.scrollIntoView({ behavior: "smooth" });
+    return;
+  }
+
+  let chosenCourses = [];
+  let total = 0;
+
+  for (let i = 0; i < selectedCourses.length; i++) {
+    const courseNumber = Number(
+      selectedCourses[i].replace("course-", "")
+    );
+
+    for (let j = 0; j < courses.length; j++) {
+      if (courses[j].id === courseNumber) {
+        chosenCourses.push(courses[j]);
+        total = total + courses[j].prix;
+      }
+    }
+  }
+
+  if (chosenCourses.length === 0) {
+    result.hidden = false;
+    result.textContent =
+      "Votre panier ne contient aucun cours valide.";
+    return;
+  }
+
+  const dossierNumber =
+    "NA-" + Date.now().toString(36).toUpperCase();
+
+  result.innerHTML = "";
+
+  const heading = document.createElement("h2");
+  heading.textContent = "Récapitulatif de votre dossier";
+  result.appendChild(heading);
+
+  const reference = document.createElement("p");
+  reference.textContent = "Numéro de dossier : " + dossierNumber;
+  result.appendChild(reference);
+
+  const student = document.createElement("p");
+  student.textContent =
+    "Élève : " + fields.studentName.value.trim();
+  result.appendChild(student);
+
+  const level = document.createElement("p");
+  level.textContent =
+    "Niveau : " + fields.studentLevel.value;
+  result.appendChild(level);
+
+  const courseHeading = document.createElement("h3");
+  courseHeading.textContent = "Cours sélectionnés";
+  result.appendChild(courseHeading);
+
+  const list = document.createElement("ul");
+
+  for (let i = 0; i < chosenCourses.length; i++) {
+    const item = document.createElement("li");
+
+    item.textContent =
+      chosenCourses[i].titre + " — " +
+      chosenCourses[i].prix + " MAD / mois";
+
+    list.appendChild(item);
+  }
+
+  result.appendChild(list);
+
+  const totalText = document.createElement("p");
+  totalText.textContent = "Total mensuel : " + total + " MAD";
+  result.appendChild(totalText);
+
+  const notice = document.createElement("p");
+  notice.textContent =
+    "Votre récapitulatif a été préparé. " +
+    "Aucune inscription n'a été enregistrée sur un serveur.";
+  result.appendChild(notice);
+
+  result.hidden = false;
+  result.scrollIntoView({ behavior: "smooth", block: "start" });
+
+  registrationForm.reset();
+  selectedCourses.length = 0;
+
+  for (const name in fields) {
+    fields[name].classList.remove("is-valid", "is-invalid");
+    fields[name].removeAttribute("aria-invalid");
+    errors[name].textContent = "";
+  }
+
+  displayCourses();
+  renderCart();
 });
